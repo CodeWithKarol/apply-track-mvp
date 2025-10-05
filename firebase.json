@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "dist/apply-track-mvp/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
