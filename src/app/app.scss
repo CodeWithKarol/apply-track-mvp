@@ -80,6 +80,32 @@
     font-weight: 500;
   }
 
+  .overdue-section,
+  .upcoming-section {
+    margin-bottom: 16px;
+  }
+
+  .overdue-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--mat-warn-700);
+
+    mat-icon {
+      color: var(--mat-warn-600);
+    }
+  }
+
+  .upcoming-title {
+    margin: 0 0 12px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--mat-text-primary);
+  }
+
   .no-reminders {
     text-align: center;
     padding: 32px;
@@ -115,6 +141,11 @@
     &.urgent {
       border-left: 4px solid var(--mat-warn-500);
       background-color: var(--mat-warn-50);
+    }
+
+    &.overdue {
+      border-left: 4px solid var(--mat-error-500);
+      background-color: var(--mat-error-50);
     }
 
     .reminder-header {
@@ -173,6 +204,18 @@
 
       .reminder-time {
         font-weight: 500;
+      }
+
+      .urgency-text {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--mat-primary-600);
+      }
+
+      .overdue-text {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--mat-error-600);
       }
     }
 

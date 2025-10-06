@@ -24,8 +24,9 @@ export interface JobApplication {
   status: ApplicationStatus;
   dateApplied: Date;
   notes?: string;
-  followUpDate?: Date;
-  interviewDate?: Date;
+  reminderDate?: Date;
+  reminderType?: 'follow-up' | 'interview' | 'decision-deadline';
+  reminderDescription?: string;
 }
 
 export type ApplicationStatus = 'applied' | 'interview' | 'offer' | 'rejected';
@@ -38,15 +39,15 @@ export interface ApplicationStats {
   successRate: number;
 }
 
-export interface Reminder {
-  id: string;
+export interface ComputedReminder {
   applicationId: string;
   company: string;
   position: string;
   type: 'follow-up' | 'interview' | 'decision-deadline';
   date: Date;
   description: string;
-  completed: boolean;
+  isOverdue: boolean;
+  daysUntilDue: number;
 }
 
 @Component({
@@ -78,18 +79,22 @@ export class App {
       company: 'Google',
       position: 'Frontend Developer',
       status: 'applied',
-      dateApplied: new Date('2024-10-01'),
+      dateApplied: new Date('2025-10-01'),
       notes: 'Applied via careers page',
-      followUpDate: new Date('2024-10-08'),
+      reminderDate: new Date('2025-10-08T09:00:00'),
+      reminderType: 'follow-up',
+      reminderDescription: 'Follow up on application status',
     },
     {
       id: '2',
       company: 'Microsoft',
       position: 'Software Engineer',
       status: 'applied',
-      dateApplied: new Date('2024-10-03'),
+      dateApplied: new Date('2025-10-03'),
       notes: 'Referral from John',
-      followUpDate: new Date('2024-10-10'),
+      reminderDate: new Date('2025-10-10T14:00:00'),
+      reminderType: 'follow-up',
+      reminderDescription: 'Check on application progress',
     },
   ]);
 
@@ -99,13 +104,27 @@ export class App {
       company: 'Amazon',
       position: 'Full Stack Developer',
       status: 'interview',
-      dateApplied: new Date('2024-09-25'),
+      dateApplied: new Date('2025-09-25'),
       notes: 'Phone interview scheduled',
-      interviewDate: new Date('2024-10-07'),
+      reminderDate: new Date('2025-10-07T14:00:00'),
+      reminderType: 'interview',
+      reminderDescription: 'Technical phone interview at 2:00 PM',
     },
   ]);
 
-  protected readonly offerApplications = signal<JobApplication[]>([]);
+  protected readonly offerApplications = signal<JobApplication[]>([
+    {
+      id: '5',
+      company: 'Netflix',
+      position: 'Senior Frontend Developer',
+      status: 'offer',
+      dateApplied: new Date('2025-09-15'),
+      notes: 'Offer received - need to respond',
+      reminderDate: new Date('2025-10-12T17:00:00'),
+      reminderType: 'decision-deadline',
+      reminderDescription: 'Deadline to respond to job offer',
+    },
+  ]);
 
   protected readonly rejectedApplications = signal<JobApplication[]>([
     {
@@ -113,83 +132,135 @@ export class App {
       company: 'Facebook',
       position: 'React Developer',
       status: 'rejected',
-      dateApplied: new Date('2024-09-20'),
+      dateApplied: new Date('2025-09-20'),
       notes: 'Technical interview did not go well',
+      // No reminder for rejected applications
+    },
+    {
+      id: '6',
+      company: 'Apple',
+      position: 'iOS Developer',
+      status: 'applied',
+      dateApplied: new Date('2025-09-30'),
+      notes: 'Applied through LinkedIn',
+      reminderDate: new Date('2025-10-05T10:00:00'), // Overdue reminder
+      reminderType: 'follow-up',
+      reminderDescription: 'Follow up on iOS developer position',
     },
   ]);
 
   protected readonly searchTerm = signal('');
   protected readonly selectedStatus = signal<ApplicationStatus | 'all'>('all');
 
-  // Reminders data
-  protected readonly reminders = signal<Reminder[]>([
-    {
-      id: 'r1',
-      applicationId: '1',
-      company: 'Google',
-      position: 'Frontend Developer',
-      type: 'follow-up',
-      date: new Date('2025-10-08'),
-      description: 'Follow up on application status',
-      completed: false,
-    },
-    {
-      id: 'r2',
-      applicationId: '3',
-      company: 'Amazon',
-      position: 'Full Stack Developer',
-      type: 'interview',
-      date: new Date('2025-10-07'),
-      description: 'Technical phone interview at 2:00 PM',
-      completed: false,
-    },
-    {
-      id: 'r3',
-      applicationId: '2',
-      company: 'Microsoft',
-      position: 'Software Engineer',
-      type: 'follow-up',
-      date: new Date('2025-10-10'),
-      description: 'Check on application progress',
-      completed: false,
-    },
-  ]);
-
   // Computed stats based on all applications
   protected readonly stats = signal<ApplicationStats>({
-    total: 4,
+    total: 5,
     applied: 2,
     interviews: 1,
-    offers: 0,
-    successRate: 0,
+    offers: 1,
+    successRate: 20,
   });
 
-  // Get upcoming reminders (next 7 days)
-  protected readonly upcomingReminders = signal<Reminder[]>([]);
+  // Get upcoming and overdue reminders
+  protected readonly upcomingReminders = signal<ComputedReminder[]>([]);
+  protected readonly overdueReminders = signal<ComputedReminder[]>([]);
 
   constructor() {
-    this.updateUpcomingReminders();
+    this.updateReminders();
+    this.updateStats();
   }
 
-  private updateUpcomingReminders() {
-    const today = new Date();
-    const nextWeek = new Date();
-    nextWeek.setDate(today.getDate() + 7);
+  private getAllApplications(): JobApplication[] {
+    return [
+      ...this.appliedApplications(),
+      ...this.interviewApplications(),
+      ...this.offerApplications(),
+      ...this.rejectedApplications(),
+    ];
+  }
 
-    const upcoming = this.reminders()
-      .filter((reminder) => !reminder.completed)
-      .filter((reminder) => reminder.date >= today && reminder.date <= nextWeek)
-      .sort((a, b) => a.date.getTime() - b.date.getTime());
+  private updateReminders() {
+    const currentDate = new Date();
+    const reminderWindow = 14; // 14 days ahead
+    const futureDate = new Date();
+    futureDate.setDate(currentDate.getDate() + reminderWindow);
 
+    const allApplications = this.getAllApplications();
+    const applicationsWithReminders = allApplications.filter(
+      (app) => app.reminderDate && app.reminderType && app.reminderDescription
+    );
+
+    const computedReminders: ComputedReminder[] = applicationsWithReminders.map((app) => {
+      const reminderDate = app.reminderDate!;
+      const timeDiff = reminderDate.getTime() - currentDate.getTime();
+      const daysUntilDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+      return {
+        applicationId: app.id,
+        company: app.company,
+        position: app.position,
+        type: app.reminderType!,
+        date: reminderDate,
+        description: app.reminderDescription!,
+        isOverdue: reminderDate < currentDate,
+        daysUntilDue,
+      };
+    });
+
+    // Separate overdue and upcoming reminders
+    const overdue = computedReminders
+      .filter((reminder) => reminder.isOverdue)
+      .sort((a, b) => b.date.getTime() - a.date.getTime()); // Most recent overdue first
+
+    const upcoming = computedReminders
+      .filter(
+        (reminder) =>
+          !reminder.isOverdue && reminder.date >= currentDate && reminder.date <= futureDate
+      )
+      .sort((a, b) => a.date.getTime() - b.date.getTime()); // Soonest first
+
+    this.overdueReminders.set(overdue);
     this.upcomingReminders.set(upcoming);
   }
 
-  markReminderComplete(reminderId: string) {
-    const updatedReminders = this.reminders().map((reminder) =>
-      reminder.id === reminderId ? { ...reminder, completed: true } : reminder
-    );
-    this.reminders.set(updatedReminders);
-    this.updateUpcomingReminders();
+  markReminderComplete(applicationId: string) {
+    console.log('Marking reminder complete for application ID:', applicationId);
+
+    // Find and update the application to remove its reminder
+    const allArrays = [
+      this.appliedApplications,
+      this.interviewApplications,
+      this.offerApplications,
+      this.rejectedApplications,
+    ];
+
+    for (const arraySignal of allArrays) {
+      const applications = arraySignal();
+      const targetApp = applications.find((app) => app.id === applicationId);
+
+      if (targetApp) {
+        console.log('Found application:', targetApp.company, '-', targetApp.position);
+
+        const updatedApplications = applications.map((app) =>
+          app.id === applicationId
+            ? {
+                ...app,
+                reminderDate: undefined,
+                reminderType: undefined,
+                reminderDescription: undefined,
+              }
+            : app
+        );
+
+        console.log('Updating applications array');
+        arraySignal.set(updatedApplications);
+        break;
+      }
+    }
+
+    console.log('Updating reminders and stats');
+    this.updateReminders();
+    this.updateStats();
   }
 
   getReminderIcon(type: string): string {
@@ -205,11 +276,25 @@ export class App {
     }
   }
 
-  isReminderUrgent(date: Date): boolean {
-    const today = new Date();
-    const timeDiff = date.getTime() - today.getTime();
-    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    return daysDiff <= 2; // Urgent if within 2 days
+  isReminderUrgent(reminder: ComputedReminder): boolean {
+    return reminder.isOverdue || reminder.daysUntilDue <= 2;
+  }
+
+  getReminderUrgencyClass(reminder: ComputedReminder): string {
+    if (reminder.isOverdue) return 'overdue';
+    if (reminder.daysUntilDue <= 2) return 'urgent';
+    return '';
+  }
+
+  getReminderDateText(reminder: ComputedReminder): string {
+    if (reminder.isOverdue) {
+      const daysPast = Math.abs(reminder.daysUntilDue);
+      return daysPast === 1 ? '1 day overdue' : `${daysPast} days overdue`;
+    }
+
+    if (reminder.daysUntilDue === 0) return 'Today';
+    if (reminder.daysUntilDue === 1) return 'Tomorrow';
+    return `In ${reminder.daysUntilDue} days`;
   }
 
   // Drag and drop handler for job applications
@@ -235,6 +320,7 @@ export class App {
 
       // Update stats after moving
       this.updateStats();
+      this.updateReminders();
     }
   }
 

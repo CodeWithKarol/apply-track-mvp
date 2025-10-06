@@ -78,50 +78,100 @@
   <div class="reminders-section">
     <h2>Upcoming Reminders</h2>
 
-    @if (upcomingReminders().length === 0) {
+    @if (overdueReminders().length === 0 && upcomingReminders().length === 0) {
     <div class="no-reminders">
       <mat-icon>check_circle</mat-icon>
       <p>No upcoming reminders. You're all caught up!</p>
     </div>
     } @else {
-    <div class="reminders-list">
-      @for (reminder of upcomingReminders(); track reminder.id) {
-      <mat-card class="reminder-card" [class.urgent]="isReminderUrgent(reminder.date)">
-        <mat-card-content>
-          <div class="reminder-header">
-            <div class="reminder-info">
-              <mat-icon class="reminder-icon">{{ getReminderIcon(reminder.type) }}</mat-icon>
-              <div class="reminder-details">
-                <h4>{{ reminder.company }} - {{ reminder.position }}</h4>
-                <p class="reminder-description">{{ reminder.description }}</p>
+    <!-- Overdue Reminders -->
+    @if (overdueReminders().length > 0) {
+    <div class="overdue-section">
+      <h3 class="overdue-title">
+        <mat-icon>warning</mat-icon>
+        Overdue ({{ overdueReminders().length }})
+      </h3>
+      <div class="reminders-list">
+        @for (reminder of overdueReminders(); track reminder.applicationId) {
+        <mat-card class="reminder-card overdue">
+          <mat-card-content>
+            <div class="reminder-header">
+              <div class="reminder-info">
+                <mat-icon class="reminder-icon">{{ getReminderIcon(reminder.type) }}</mat-icon>
+                <div class="reminder-details">
+                  <h4>{{ reminder.company }} - {{ reminder.position }}</h4>
+                  <p class="reminder-description">{{ reminder.description }}</p>
+                </div>
+              </div>
+              <div class="reminder-actions">
+                <div class="reminder-date">
+                  <small>{{ reminder.date | date : 'MMM d, y' }}</small>
+                  <small class="reminder-time">{{ reminder.date | date : 'shortTime' }}</small>
+                  <span class="overdue-text">{{ getReminderDateText(reminder) }}</span>
+                </div>
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="markReminderComplete(reminder.applicationId)"
+                  aria-label="Mark as complete"
+                >
+                  <mat-icon>check</mat-icon>
+                </button>
               </div>
             </div>
-            <div class="reminder-actions">
-              <div class="reminder-date">
-                <small>{{ reminder.date | date : 'MMM d, y' }}</small>
-                <small class="reminder-time">{{ reminder.date | date : 'shortTime' }}</small>
-              </div>
-              <button
-                mat-icon-button
-                color="primary"
-                (click)="markReminderComplete(reminder.id)"
-                aria-label="Mark as complete"
-              >
-                <mat-icon>check</mat-icon>
-              </button>
-            </div>
-          </div>
-          @if (isReminderUrgent(reminder.date)) {
-          <div class="urgent-badge">
-            <mat-icon>priority_high</mat-icon>
-            <span>Urgent</span>
-          </div>
-          }
-        </mat-card-content>
-      </mat-card>
-      }
+          </mat-card-content>
+        </mat-card>
+        }
+      </div>
     </div>
     }
+
+    <!-- Upcoming Reminders -->
+    @if (upcomingReminders().length > 0) {
+    <div class="upcoming-section">
+      @if (overdueReminders().length > 0) {
+      <h3 class="upcoming-title">Upcoming ({{ upcomingReminders().length }})</h3>
+      }
+      <div class="reminders-list">
+        @for (reminder of upcomingReminders(); track reminder.applicationId) {
+        <mat-card class="reminder-card" [class]="getReminderUrgencyClass(reminder)">
+          <mat-card-content>
+            <div class="reminder-header">
+              <div class="reminder-info">
+                <mat-icon class="reminder-icon">{{ getReminderIcon(reminder.type) }}</mat-icon>
+                <div class="reminder-details">
+                  <h4>{{ reminder.company }} - {{ reminder.position }}</h4>
+                  <p class="reminder-description">{{ reminder.description }}</p>
+                </div>
+              </div>
+              <div class="reminder-actions">
+                <div class="reminder-date">
+                  <small>{{ reminder.date | date : 'MMM d, y' }}</small>
+                  <small class="reminder-time">{{ reminder.date | date : 'shortTime' }}</small>
+                  <span class="urgency-text">{{ getReminderDateText(reminder) }}</span>
+                </div>
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="markReminderComplete(reminder.applicationId)"
+                  aria-label="Mark as complete"
+                >
+                  <mat-icon>check</mat-icon>
+                </button>
+              </div>
+            </div>
+            @if (isReminderUrgent(reminder) && !reminder.isOverdue) {
+            <div class="urgent-badge">
+              <mat-icon>priority_high</mat-icon>
+              <span>Urgent</span>
+            </div>
+            }
+          </mat-card-content>
+        </mat-card>
+        }
+      </div>
+    </div>
+    } }
   </div>
 
   <!-- Status Columns -->
