@@ -79,6 +79,127 @@
     font-size: 1.25rem;
     font-weight: 500;
   }
+
+  .no-reminders {
+    text-align: center;
+    padding: 32px;
+    color: var(--mat-text-secondary);
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: var(--mat-primary-500);
+      margin-bottom: 16px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+    }
+  }
+
+  .reminders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .reminder-card {
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    &.urgent {
+      border-left: 4px solid var(--mat-warn-500);
+      background-color: var(--mat-warn-50);
+    }
+
+    .reminder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .reminder-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .reminder-icon {
+      color: var(--mat-primary-500);
+      margin-top: 2px;
+    }
+
+    .reminder-details {
+      flex: 1;
+
+      h4 {
+        margin: 0 0 4px 0;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--mat-text-primary);
+      }
+
+      .reminder-description {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--mat-text-secondary);
+        line-height: 1.4;
+      }
+    }
+
+    .reminder-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reminder-date {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      small {
+        color: var(--mat-text-secondary);
+        font-size: 0.75rem;
+      }
+
+      .reminder-time {
+        font-weight: 500;
+      }
+    }
+
+    .urgent-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 12px;
+      padding: 4px 8px;
+      background-color: var(--mat-warn-100);
+      border-radius: 12px;
+      width: fit-content;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: var(--mat-warn-700);
+      }
+
+      span {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--mat-warn-700);
+      }
+    }
+  }
 }
 
 .status-columns-container {

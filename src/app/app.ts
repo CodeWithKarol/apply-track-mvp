@@ -24,6 +24,8 @@ export interface JobApplication {
   status: ApplicationStatus;
   dateApplied: Date;
   notes?: string;
+  followUpDate?: Date;
+  interviewDate?: Date;
 }
 
 export type ApplicationStatus = 'applied' | 'interview' | 'offer' | 'rejected';
@@ -34,6 +36,17 @@ export interface ApplicationStats {
   interviews: number;
   offers: number;
   successRate: number;
+}
+
+export interface Reminder {
+  id: string;
+  applicationId: string;
+  company: string;
+  position: string;
+  type: 'follow-up' | 'interview' | 'decision-deadline';
+  date: Date;
+  description: string;
+  completed: boolean;
 }
 
 @Component({
@@ -67,6 +80,7 @@ export class App {
       status: 'applied',
       dateApplied: new Date('2024-10-01'),
       notes: 'Applied via careers page',
+      followUpDate: new Date('2024-10-08'),
     },
     {
       id: '2',
@@ -75,6 +89,7 @@ export class App {
       status: 'applied',
       dateApplied: new Date('2024-10-03'),
       notes: 'Referral from John',
+      followUpDate: new Date('2024-10-10'),
     },
   ]);
 
@@ -86,6 +101,7 @@ export class App {
       status: 'interview',
       dateApplied: new Date('2024-09-25'),
       notes: 'Phone interview scheduled',
+      interviewDate: new Date('2024-10-07'),
     },
   ]);
 
@@ -105,6 +121,40 @@ export class App {
   protected readonly searchTerm = signal('');
   protected readonly selectedStatus = signal<ApplicationStatus | 'all'>('all');
 
+  // Reminders data
+  protected readonly reminders = signal<Reminder[]>([
+    {
+      id: 'r1',
+      applicationId: '1',
+      company: 'Google',
+      position: 'Frontend Developer',
+      type: 'follow-up',
+      date: new Date('2025-10-08'),
+      description: 'Follow up on application status',
+      completed: false,
+    },
+    {
+      id: 'r2',
+      applicationId: '3',
+      company: 'Amazon',
+      position: 'Full Stack Developer',
+      type: 'interview',
+      date: new Date('2025-10-07'),
+      description: 'Technical phone interview at 2:00 PM',
+      completed: false,
+    },
+    {
+      id: 'r3',
+      applicationId: '2',
+      company: 'Microsoft',
+      position: 'Software Engineer',
+      type: 'follow-up',
+      date: new Date('2025-10-10'),
+      description: 'Check on application progress',
+      completed: false,
+    },
+  ]);
+
   // Computed stats based on all applications
   protected readonly stats = signal<ApplicationStats>({
     total: 4,
@@ -113,6 +163,54 @@ export class App {
     offers: 0,
     successRate: 0,
   });
+
+  // Get upcoming reminders (next 7 days)
+  protected readonly upcomingReminders = signal<Reminder[]>([]);
+
+  constructor() {
+    this.updateUpcomingReminders();
+  }
+
+  private updateUpcomingReminders() {
+    const today = new Date();
+    const nextWeek = new Date();
+    nextWeek.setDate(today.getDate() + 7);
+
+    const upcoming = this.reminders()
+      .filter((reminder) => !reminder.completed)
+      .filter((reminder) => reminder.date >= today && reminder.date <= nextWeek)
+      .sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    this.upcomingReminders.set(upcoming);
+  }
+
+  markReminderComplete(reminderId: string) {
+    const updatedReminders = this.reminders().map((reminder) =>
+      reminder.id === reminderId ? { ...reminder, completed: true } : reminder
+    );
+    this.reminders.set(updatedReminders);
+    this.updateUpcomingReminders();
+  }
+
+  getReminderIcon(type: string): string {
+    switch (type) {
+      case 'interview':
+        return 'videocam';
+      case 'follow-up':
+        return 'email';
+      case 'decision-deadline':
+        return 'schedule';
+      default:
+        return 'notifications';
+    }
+  }
+
+  isReminderUrgent(date: Date): boolean {
+    const today = new Date();
+    const timeDiff = date.getTime() - today.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return daysDiff <= 2; // Urgent if within 2 days
+  }
 
   // Drag and drop handler for job applications
   drop(event: CdkDragDrop<JobApplication[]>) {
