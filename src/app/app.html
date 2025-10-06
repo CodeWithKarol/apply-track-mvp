@@ -81,46 +81,149 @@
 
   <!-- Status Columns -->
   <div class="status-columns-container">
+    <!-- Applied Column -->
     <div class="status-column">
       <div class="column-header">
         <span>Applied</span>
-        <mat-chip>0</mat-chip>
+        <mat-chip>{{ appliedApplications().length }}</mat-chip>
       </div>
-      <div class="column-content">
-        <!-- Applications will be dynamically added here -->
+      <div
+        cdkDropList
+        #appliedList="cdkDropList"
+        id="applied-list"
+        [cdkDropListData]="appliedApplications()"
+        [cdkDropListConnectedTo]="[interviewList, offerList, rejectedList]"
+        class="column-content"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (app of appliedApplications(); track app.id) {
+        <mat-card class="application-card" cdkDrag>
+          <mat-card-header>
+            <mat-card-title>{{ app.company }}</mat-card-title>
+            <mat-card-subtitle>{{ app.position }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              <small>Applied: {{ app.dateApplied | date : 'shortDate' }}</small>
+            </p>
+            @if (app.notes) {
+            <p>
+              <small>{{ app.notes }}</small>
+            </p>
+            }
+          </mat-card-content>
+        </mat-card>
+        }
       </div>
     </div>
 
+    <!-- Interview Column -->
     <div class="status-column">
       <div class="column-header">
         <span>Interview</span>
-        <mat-chip>0</mat-chip>
+        <mat-chip>{{ interviewApplications().length }}</mat-chip>
       </div>
-      <div class="column-content">
-        <!-- Applications will be dynamically added here -->
+      <div
+        cdkDropList
+        #interviewList="cdkDropList"
+        id="interview-list"
+        [cdkDropListData]="interviewApplications()"
+        [cdkDropListConnectedTo]="[appliedList, offerList, rejectedList]"
+        class="column-content"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (app of interviewApplications(); track app.id) {
+        <mat-card class="application-card" cdkDrag>
+          <mat-card-header>
+            <mat-card-title>{{ app.company }}</mat-card-title>
+            <mat-card-subtitle>{{ app.position }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              <small>Applied: {{ app.dateApplied | date : 'shortDate' }}</small>
+            </p>
+            @if (app.notes) {
+            <p>
+              <small>{{ app.notes }}</small>
+            </p>
+            }
+          </mat-card-content>
+        </mat-card>
+        }
       </div>
     </div>
 
+    <!-- Offer Column -->
     <div class="status-column">
       <div class="column-header">
         <span>Offer</span>
-        <mat-chip>0</mat-chip>
+        <mat-chip>{{ offerApplications().length }}</mat-chip>
       </div>
-      <div class="column-content">
-        <!-- Applications will be dynamically added here -->
+      <div
+        cdkDropList
+        #offerList="cdkDropList"
+        id="offer-list"
+        [cdkDropListData]="offerApplications()"
+        [cdkDropListConnectedTo]="[appliedList, interviewList, rejectedList]"
+        class="column-content"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (app of offerApplications(); track app.id) {
+        <mat-card class="application-card" cdkDrag>
+          <mat-card-header>
+            <mat-card-title>{{ app.company }}</mat-card-title>
+            <mat-card-subtitle>{{ app.position }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              <small>Applied: {{ app.dateApplied | date : 'shortDate' }}</small>
+            </p>
+            @if (app.notes) {
+            <p>
+              <small>{{ app.notes }}</small>
+            </p>
+            }
+          </mat-card-content>
+        </mat-card>
+        }
       </div>
     </div>
 
+    <!-- Rejected Column -->
     <div class="status-column">
       <div class="column-header">
         <span>Rejected</span>
-        <mat-chip>0</mat-chip>
+        <mat-chip>{{ rejectedApplications().length }}</mat-chip>
       </div>
-      <div class="column-content">
-        <!-- Applications will be dynamically added here -->
+      <div
+        cdkDropList
+        #rejectedList="cdkDropList"
+        id="rejected-list"
+        [cdkDropListData]="rejectedApplications()"
+        [cdkDropListConnectedTo]="[appliedList, interviewList, offerList]"
+        class="column-content"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (app of rejectedApplications(); track app.id) {
+        <mat-card class="application-card" cdkDrag>
+          <mat-card-header>
+            <mat-card-title>{{ app.company }}</mat-card-title>
+            <mat-card-subtitle>{{ app.position }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              <small>Applied: {{ app.dateApplied | date : 'shortDate' }}</small>
+            </p>
+            @if (app.notes) {
+            <p>
+              <small>{{ app.notes }}</small>
+            </p>
+            }
+          </mat-card-content>
+        </mat-card>
+        }
       </div>
     </div>
   </div>
 </div>
-
 <router-outlet />
