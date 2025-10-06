@@ -57,14 +57,14 @@
       <input
         matInput
         [value]="searchTerm()"
-        (input)="searchTerm.set($any($event.target).value || '')"
+        (input)="onSearchChange($any($event.target).value || '')"
       />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="filter-field">
       <mat-label>All Statuses</mat-label>
-      <mat-select [value]="selectedStatus()" (valueChange)="selectedStatus.set($event)">
+      <mat-select [value]="selectedStatus()" (valueChange)="onStatusChange($event)">
         <mat-option value="all">All Statuses</mat-option>
         <mat-option value="applied">Applied</mat-option>
         <mat-option value="interview">Interview</mat-option>
@@ -180,18 +180,18 @@
     <div class="status-column">
       <div class="column-header">
         <span>Applied</span>
-        <mat-chip>{{ appliedApplications().length }}</mat-chip>
+        <mat-chip>{{ filteredAppliedApplications().length }}</mat-chip>
       </div>
       <div
         cdkDropList
         #appliedList="cdkDropList"
         id="applied-list"
-        [cdkDropListData]="appliedApplications()"
+        [cdkDropListData]="filteredAppliedApplications()"
         [cdkDropListConnectedTo]="[interviewList, offerList, rejectedList]"
         class="column-content"
         (cdkDropListDropped)="drop($event)"
       >
-        @for (app of appliedApplications(); track app.id) {
+        @for (app of filteredAppliedApplications(); track app.id) {
         <mat-card class="application-card" cdkDrag>
           <mat-card-header>
             <mat-card-title>{{ app.company }}</mat-card-title>
@@ -216,18 +216,18 @@
     <div class="status-column">
       <div class="column-header">
         <span>Interview</span>
-        <mat-chip>{{ interviewApplications().length }}</mat-chip>
+        <mat-chip>{{ filteredInterviewApplications().length }}</mat-chip>
       </div>
       <div
         cdkDropList
         #interviewList="cdkDropList"
         id="interview-list"
-        [cdkDropListData]="interviewApplications()"
+        [cdkDropListData]="filteredInterviewApplications()"
         [cdkDropListConnectedTo]="[appliedList, offerList, rejectedList]"
         class="column-content"
         (cdkDropListDropped)="drop($event)"
       >
-        @for (app of interviewApplications(); track app.id) {
+        @for (app of filteredInterviewApplications(); track app.id) {
         <mat-card class="application-card" cdkDrag>
           <mat-card-header>
             <mat-card-title>{{ app.company }}</mat-card-title>
@@ -252,18 +252,18 @@
     <div class="status-column">
       <div class="column-header">
         <span>Offer</span>
-        <mat-chip>{{ offerApplications().length }}</mat-chip>
+        <mat-chip>{{ filteredOfferApplications().length }}</mat-chip>
       </div>
       <div
         cdkDropList
         #offerList="cdkDropList"
         id="offer-list"
-        [cdkDropListData]="offerApplications()"
+        [cdkDropListData]="filteredOfferApplications()"
         [cdkDropListConnectedTo]="[appliedList, interviewList, rejectedList]"
         class="column-content"
         (cdkDropListDropped)="drop($event)"
       >
-        @for (app of offerApplications(); track app.id) {
+        @for (app of filteredOfferApplications(); track app.id) {
         <mat-card class="application-card" cdkDrag>
           <mat-card-header>
             <mat-card-title>{{ app.company }}</mat-card-title>
@@ -288,18 +288,18 @@
     <div class="status-column">
       <div class="column-header">
         <span>Rejected</span>
-        <mat-chip>{{ rejectedApplications().length }}</mat-chip>
+        <mat-chip>{{ filteredRejectedApplications().length }}</mat-chip>
       </div>
       <div
         cdkDropList
         #rejectedList="cdkDropList"
         id="rejected-list"
-        [cdkDropListData]="rejectedApplications()"
+        [cdkDropListData]="filteredRejectedApplications()"
         [cdkDropListConnectedTo]="[appliedList, interviewList, offerList]"
         class="column-content"
         (cdkDropListDropped)="drop($event)"
       >
-        @for (app of rejectedApplications(); track app.id) {
+        @for (app of filteredRejectedApplications(); track app.id) {
         <mat-card class="application-card" cdkDrag>
           <mat-card-header>
             <mat-card-title>{{ app.company }}</mat-card-title>

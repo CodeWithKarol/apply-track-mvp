@@ -152,6 +152,12 @@ export class App {
   protected readonly searchTerm = signal('');
   protected readonly selectedStatus = signal<ApplicationStatus | 'all'>('all');
 
+  // Filtered applications based on search and status filters
+  protected readonly filteredAppliedApplications = signal<JobApplication[]>([]);
+  protected readonly filteredInterviewApplications = signal<JobApplication[]>([]);
+  protected readonly filteredOfferApplications = signal<JobApplication[]>([]);
+  protected readonly filteredRejectedApplications = signal<JobApplication[]>([]);
+
   // Computed stats based on all applications
   protected readonly stats = signal<ApplicationStats>({
     total: 5,
@@ -168,6 +174,7 @@ export class App {
   constructor() {
     this.updateReminders();
     this.updateStats();
+    this.updateFilteredApplications();
   }
 
   private getAllApplications(): JobApplication[] {
@@ -177,6 +184,33 @@ export class App {
       ...this.offerApplications(),
       ...this.rejectedApplications(),
     ];
+  }
+
+  private updateFilteredApplications() {
+    const searchTerm = this.searchTerm().toLowerCase().trim();
+    const selectedStatus = this.selectedStatus();
+
+    // Filter function
+    const filterApplications = (applications: JobApplication[]): JobApplication[] => {
+      return applications.filter((app) => {
+        // Search filter - check company and position
+        const matchesSearch =
+          searchTerm === '' ||
+          app.company.toLowerCase().includes(searchTerm) ||
+          app.position.toLowerCase().includes(searchTerm);
+
+        // Status filter
+        const matchesStatus = selectedStatus === 'all' || app.status === selectedStatus;
+
+        return matchesSearch && matchesStatus;
+      });
+    };
+
+    // Apply filters to each status array
+    this.filteredAppliedApplications.set(filterApplications(this.appliedApplications()));
+    this.filteredInterviewApplications.set(filterApplications(this.interviewApplications()));
+    this.filteredOfferApplications.set(filterApplications(this.offerApplications()));
+    this.filteredRejectedApplications.set(filterApplications(this.rejectedApplications()));
   }
 
   private updateReminders() {
@@ -261,6 +295,7 @@ export class App {
     console.log('Updating reminders and stats');
     this.updateReminders();
     this.updateStats();
+    this.updateFilteredApplications();
   }
 
   getReminderIcon(type: string): string {
@@ -297,30 +332,57 @@ export class App {
     return `In ${reminder.daysUntilDue} days`;
   }
 
+  // Filter handling methods
+  onSearchChange(value: string) {
+    this.searchTerm.set(value);
+    this.updateFilteredApplications();
+  }
+
+  onStatusChange(status: ApplicationStatus | 'all') {
+    this.selectedStatus.set(status);
+    this.updateFilteredApplications();
+  }
+
   // Drag and drop handler for job applications
   drop(event: CdkDragDrop<JobApplication[]>) {
     if (event.previousContainer === event.container) {
-      // Reordering within the same column
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      // Reordering within the same column - work with original arrays
+      const containerId = event.container.id;
+      const originalArray = this.getOriginalArrayFromContainerId(containerId);
+
+      // Find the actual indices in the original array
+      const draggedItem = event.container.data[event.previousIndex];
+      const actualPrevIndex = originalArray().findIndex(
+        (app: JobApplication) => app.id === draggedItem.id
+      );
+
+      // For reordering, we need to find where to insert in the original array
+      // This is complex with filtering, so for now we'll skip reordering when filters are active
+      if (this.searchTerm() === '' && this.selectedStatus() === 'all') {
+        moveItemInArray(originalArray(), actualPrevIndex, event.currentIndex);
+        this.updateFilteredApplications();
+      }
     } else {
       // Moving between columns - update the application status
       const application = event.previousContainer.data[event.previousIndex];
       const newStatus = this.getStatusFromContainerId(event.container.id);
+      const oldStatus = this.getStatusFromContainerId(event.previousContainer.id);
 
-      // Update application status
-      application.status = newStatus;
+      // Remove from old array
+      const oldArray = this.getOriginalArrayFromContainerId(event.previousContainer.id);
+      const oldApplications = oldArray().filter((app: JobApplication) => app.id !== application.id);
+      oldArray.set(oldApplications);
 
-      // Transfer the item between arrays
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+      // Update application status and add to new array
+      const updatedApplication = { ...application, status: newStatus };
+      const newArray = this.getOriginalArrayFromContainerId(event.container.id);
+      const newApplications = [...newArray(), updatedApplication];
+      newArray.set(newApplications);
 
-      // Update stats after moving
+      // Update everything
       this.updateStats();
       this.updateReminders();
+      this.updateFilteredApplications();
     }
   }
 
@@ -336,6 +398,21 @@ export class App {
         return 'rejected';
       default:
         return 'applied';
+    }
+  }
+
+  private getOriginalArrayFromContainerId(containerId: string) {
+    switch (containerId) {
+      case 'applied-list':
+        return this.appliedApplications;
+      case 'interview-list':
+        return this.interviewApplications;
+      case 'offer-list':
+        return this.offerApplications;
+      case 'rejected-list':
+        return this.rejectedApplications;
+      default:
+        return this.appliedApplications;
     }
   }
 
