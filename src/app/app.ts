@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import {
   CdkDrag,
   CdkDragDrop,
@@ -16,6 +17,10 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import {
+  AddApplicationDialogComponent,
+  AddApplicationDialogResult,
+} from './components/add-application-dialog/add-application-dialog.component';
 
 export interface JobApplication {
   id: string;
@@ -63,6 +68,7 @@ export interface ComputedReminder {
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
+    MatDialogModule,
     CdkDropList,
     CdkDrag,
   ],
@@ -171,7 +177,7 @@ export class App {
   protected readonly upcomingReminders = signal<ComputedReminder[]>([]);
   protected readonly overdueReminders = signal<ComputedReminder[]>([]);
 
-  constructor() {
+  constructor(private dialog: MatDialog) {
     this.updateReminders();
     this.updateStats();
     this.updateFilteredApplications();
@@ -414,6 +420,53 @@ export class App {
       default:
         return this.appliedApplications;
     }
+  }
+
+  openAddApplicationDialog(): void {
+    const dialogRef = this.dialog.open(AddApplicationDialogComponent, {
+      width: '600px',
+      maxWidth: '90vw',
+      data: {},
+      disableClose: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result: AddApplicationDialogResult | undefined) => {
+      if (result) {
+        this.addNewApplication(result.application);
+      }
+    });
+  }
+
+  private addNewApplication(application: Omit<JobApplication, 'id'>): void {
+    const newApplication: JobApplication = {
+      ...application,
+      id: this.generateId(),
+    };
+
+    // Add to the appropriate status array
+    switch (newApplication.status) {
+      case 'applied':
+        this.appliedApplications.update((apps) => [...apps, newApplication]);
+        break;
+      case 'interview':
+        this.interviewApplications.update((apps) => [...apps, newApplication]);
+        break;
+      case 'offer':
+        this.offerApplications.update((apps) => [...apps, newApplication]);
+        break;
+      case 'rejected':
+        this.rejectedApplications.update((apps) => [...apps, newApplication]);
+        break;
+    }
+
+    // Update computed values
+    this.updateStats();
+    this.updateFilteredApplications();
+    this.updateReminders();
+  }
+
+  private generateId(): string {
+    return Math.random().toString(36).substr(2, 9);
   }
 
   private updateStats() {
