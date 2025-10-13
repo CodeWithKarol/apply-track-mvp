@@ -277,11 +277,32 @@
 
 .application-card {
   margin-bottom: 12px;
-  cursor: move;
-  transition: box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
 
   &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  // Add a subtle edit icon hint
+  &::after {
+    content: '✏️';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  &:hover::after {
+    opacity: 0.6;
   }
 
   mat-card-header {

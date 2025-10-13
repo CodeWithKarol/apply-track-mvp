@@ -437,6 +437,26 @@ export class App {
     });
   }
 
+  editApplication(application: JobApplication, event?: Event): void {
+    // Prevent edit when dragging
+    if (event && (event.target as HTMLElement).closest('.cdk-drag-preview')) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(AddApplicationDialogComponent, {
+      width: '600px',
+      maxWidth: '90vw',
+      data: { application },
+      disableClose: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result: AddApplicationDialogResult | undefined) => {
+      if (result) {
+        this.updateExistingApplication(application.id, result.application);
+      }
+    });
+  }
+
   private addNewApplication(application: Omit<JobApplication, 'id'>): void {
     const newApplication: JobApplication = {
       ...application,
@@ -456,6 +476,57 @@ export class App {
         break;
       case 'rejected':
         this.rejectedApplications.update((apps) => [...apps, newApplication]);
+        break;
+    }
+
+    // Update computed values
+    this.updateStats();
+    this.updateFilteredApplications();
+    this.updateReminders();
+  }
+
+  private updateExistingApplication(
+    applicationId: string,
+    updatedData: Omit<JobApplication, 'id'>
+  ): void {
+    const updatedApplication: JobApplication = {
+      ...updatedData,
+      id: applicationId,
+    };
+
+    // Find and remove from current array
+    const allArrays = [
+      this.appliedApplications,
+      this.interviewApplications,
+      this.offerApplications,
+      this.rejectedApplications,
+    ];
+
+    for (const arraySignal of allArrays) {
+      const applications = arraySignal();
+      const index = applications.findIndex((app) => app.id === applicationId);
+
+      if (index !== -1) {
+        // Remove from current array
+        const updatedApps = applications.filter((app) => app.id !== applicationId);
+        arraySignal.set(updatedApps);
+        break;
+      }
+    }
+
+    // Add to the appropriate status array based on new status
+    switch (updatedApplication.status) {
+      case 'applied':
+        this.appliedApplications.update((apps) => [...apps, updatedApplication]);
+        break;
+      case 'interview':
+        this.interviewApplications.update((apps) => [...apps, updatedApplication]);
+        break;
+      case 'offer':
+        this.offerApplications.update((apps) => [...apps, updatedApplication]);
+        break;
+      case 'rejected':
+        this.rejectedApplications.update((apps) => [...apps, updatedApplication]);
         break;
     }
 

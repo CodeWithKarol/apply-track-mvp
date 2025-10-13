@@ -38,6 +38,7 @@ export interface AddApplicationDialogResult {
 })
 export class AddApplicationDialogComponent {
   applicationForm: FormGroup;
+  isEditMode: boolean;
 
   readonly statuses: { value: ApplicationStatus; label: string }[] = [
     { value: 'applied', label: 'Applied' },
@@ -57,6 +58,8 @@ export class AddApplicationDialogComponent {
     private dialogRef: MatDialogRef<AddApplicationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AddApplicationDialogData
   ) {
+    this.isEditMode = !!data?.application;
+
     this.applicationForm = this.fb.group({
       company: [data?.application?.company || '', [Validators.required, Validators.minLength(2)]],
       position: [data?.application?.position || '', [Validators.required, Validators.minLength(2)]],

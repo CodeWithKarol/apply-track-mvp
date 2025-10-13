@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>
-  <mat-icon>add</mat-icon>
-  Add New Application
+  <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
+  {{ isEditMode ? 'Edit Application' : 'Add New Application' }}
 </h2>
 
 <mat-dialog-content>
@@ -130,7 +130,7 @@
     (click)="onSubmit()"
     [disabled]="applicationForm.invalid"
   >
-    <mat-icon>add</mat-icon>
-    Add Application
+    <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+    {{ isEditMode ? 'Save Changes' : 'Add Application' }}
   </button>
 </mat-dialog-actions>

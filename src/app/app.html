@@ -197,7 +197,7 @@
         (cdkDropListDropped)="drop($event)"
       >
         @for (app of filteredAppliedApplications(); track app.id) {
-        <mat-card class="application-card" cdkDrag>
+        <mat-card class="application-card" cdkDrag (click)="editApplication(app, $event)">
           <mat-card-header>
             <mat-card-title>{{ app.company }}</mat-card-title>
             <mat-card-subtitle>{{ app.position }}</mat-card-subtitle>
@@ -233,7 +233,7 @@
         (cdkDropListDropped)="drop($event)"
       >
         @for (app of filteredInterviewApplications(); track app.id) {
-        <mat-card class="application-card" cdkDrag>
+        <mat-card class="application-card" cdkDrag (click)="editApplication(app, $event)">
           <mat-card-header>
             <mat-card-title>{{ app.company }}</mat-card-title>
             <mat-card-subtitle>{{ app.position }}</mat-card-subtitle>
@@ -269,7 +269,7 @@
         (cdkDropListDropped)="drop($event)"
       >
         @for (app of filteredOfferApplications(); track app.id) {
-        <mat-card class="application-card" cdkDrag>
+        <mat-card class="application-card" cdkDrag (click)="editApplication(app, $event)">
           <mat-card-header>
             <mat-card-title>{{ app.company }}</mat-card-title>
             <mat-card-subtitle>{{ app.position }}</mat-card-subtitle>
@@ -305,7 +305,7 @@
         (cdkDropListDropped)="drop($event)"
       >
         @for (app of filteredRejectedApplications(); track app.id) {
-        <mat-card class="application-card" cdkDrag>
+        <mat-card class="application-card" cdkDrag (click)="editApplication(app, $event)">
           <mat-card-header>
             <mat-card-title>{{ app.company }}</mat-card-title>
             <mat-card-subtitle>{{ app.position }}</mat-card-subtitle>
