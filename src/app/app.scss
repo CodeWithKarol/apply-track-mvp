@@ -652,74 +652,97 @@ button.add-application-btn {
 }
 
 .application-card {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
   background: white;
   border: 1px solid #f1f5f9;
-  border-radius: 6px;
+  border-radius: 8px;
+  overflow: hidden;
 
-  // Modern frosted glass effect
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0.05) 100%
-    );
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+  // Ensure proper positioning for pseudo-elements
+  position: relative;
 
   // Override Material Design default padding
   .mat-mdc-card {
     padding: 0 !important;
   }
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: var(--app-accent-gradient);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+  // Pseudo-elements are now handled in hover state
 
   &:hover {
-    border-color: #e2e8f0;
+    border-color: #6366f1 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15) !important;
+    
+    &::after {
+      opacity: 1;
+    }
+    
+    &::before {
+      opacity: 1;
+    }
+    
+    // Full card overlay effect
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(99, 102, 241, 0.08);
+      border-radius: 8px;
+      opacity: 1;
+      z-index: 5;
+      pointer-events: none;
+    }
+    
+    // Edit icon over the overlay
+    &::before {
+      content: '✏️';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 14px;
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px;
+      border-radius: 4px;
+      z-index: 10;
+      pointer-events: none;
+    }
+    
+    // Highlight the title on hover
+    mat-card-title {
+      color: #6366f1 !important;
+      position: relative;
+      z-index: 6;
+    }
+    
+    // Ensure content is above overlay
+    mat-card-header,
+    mat-card-content {
+      position: relative;
+      z-index: 6;
+    }
+    
+    // Show edit cursor more prominently
+    cursor: pointer !important;
   }
 
   &:active {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
   }
 
-  // Enhanced edit icon hint
-  &::after {
-    content: '✎';
-    position: absolute;
-    top: var(--app-spacing-sm);
-    right: var(--app-spacing-sm);
-    font-size: 16px;
-    opacity: 0;
-    transition: all 0.3s ease;
-    color: #4f46e5;
-    font-weight: 700;
-  }
+  // Edit icon is now handled in hover state
 
   mat-card-header {
     margin: 0 !important;
-    padding: 16px 16px 10px 16px !important; // Consistent internal padding
-    border-bottom: 2px solid var(--app-border-light) !important; // Stronger border for better separation
-    background: rgba(248, 250, 252, 0.5) !important; // Subtle background for header distinction
+    padding: 18px 18px 12px 18px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    background: transparent !important;
 
     // Override Material Design defaults
     .mat-mdc-card-header {
@@ -728,28 +751,26 @@ button.add-application-btn {
   }
 
   mat-card-title {
-    font-size: 1.2rem !important; // Larger for better readability
-    font-weight: 800 !important; // Extra bold text for maximum contrast
-    color: var(--app-text-primary) !important;
-    letter-spacing: -0.025em;
-    line-height: 1.3 !important;
-    margin: 0 !important; // Remove default margins
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+    letter-spacing: -0.015em;
+    line-height: 1.4 !important;
+    margin: 0 !important;
     padding: 0 !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important; // Subtle text shadow for clarity
   }
 
   mat-card-subtitle {
-    font-size: 0.95rem !important; // Larger subtitle for better visibility
-    color: var(--app-text-secondary) !important;
-    font-weight: 700 !important; // Extra bold for better visibility
-    margin: 6px 0 0 0 !important; // Slightly more margin for better separation
+    font-size: 0.875rem !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+    margin: 4px 0 0 0 !important;
     padding: 0 !important;
-    line-height: 1.3 !important;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.08) !important; // Subtle shadow
+    line-height: 1.4 !important;
   }
 
   mat-card-content {
-    padding: 8px 16px 16px 16px !important; // Consistent internal padding
+    padding: 12px 18px 18px 18px !important;
     margin: 0 !important;
 
     // Override Material Design defaults
@@ -759,12 +780,17 @@ button.add-application-btn {
     }
 
     p {
-      margin: 4px 0 !important; // Reduced margins for tighter text spacing
-      line-height: 1.5 !important; // Better line spacing
+      margin: 0 0 8px 0 !important;
+      line-height: 1.5 !important;
+      
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
     }
 
     small {
-      color: var(--app-text-primary) !important; // Use primary color for better contrast
+      color: #6b7280 !important;
+      font-size: 0.8rem !important;
       font-weight: 700 !important; // Extra bold for maximum readability
       font-size: 0.85rem !important; // Larger text size
       text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important; // Subtle shadow for clarity
@@ -893,4 +919,245 @@ button.add-application-btn {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #3730a3 0%, #581c87 100%);
+}
+
+// Dialog styling to match minimalistic design
+.mat-mdc-dialog-container {
+  .mdc-dialog__surface {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e5e7eb;
+    padding: 0;
+    max-width: 500px;
+    width: 90vw;
+  }
+}
+
+mat-dialog-container {
+  padding: 0 !important;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.mat-mdc-dialog-title {
+  font-size: 1.375rem !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  margin: 0 !important;
+  padding: 28px 28px 20px 28px !important;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  
+  mat-icon {
+    color: #6366f1;
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.mat-mdc-dialog-content {
+  padding: 28px !important;
+  color: #374151;
+  max-height: 70vh;
+  overflow-y: auto;
+  
+  .mat-mdc-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+    
+    &.mat-form-field-appearance-outline {
+      .mat-mdc-form-field-outline {
+        color: #d1d5db;
+      }
+      
+      .mat-mdc-form-field-outline-thick {
+        color: #d1d5db;
+      }
+      
+      &.mat-focused .mat-mdc-form-field-outline-thick {
+        color: #6366f1 !important;
+      }
+      
+      &:hover:not(.mat-focused):not(.mat-form-field-invalid) {
+        .mat-mdc-form-field-outline {
+          color: #9ca3af;
+        }
+      }
+    }
+    
+    .mat-mdc-form-field-label {
+      color: #6b7280 !important;
+      font-weight: 600 !important;
+      font-size: 0.875rem !important;
+    }
+    
+    .mat-mdc-input-element {
+      color: #111827 !important;
+      font-weight: 500 !important;
+      font-size: 0.95rem !important;
+    }
+    
+    .mat-mdc-select-value {
+      color: #111827 !important;
+      font-weight: 500 !important;
+      font-size: 0.95rem !important;
+    }
+    
+    .mat-mdc-form-field-icon-suffix {
+      color: #6b7280;
+    }
+  }
+  
+  .mat-mdc-text-field-wrapper {
+    background: white;
+    border-radius: 8px;
+  }
+  
+  textarea.mat-mdc-input-element {
+    min-height: 100px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+  
+  // Section dividers
+  h3 {
+    color: #111827;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 24px 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+    
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  
+  // Character counter styling
+  .mat-mdc-form-field-hint {
+    color: #9ca3af !important;
+    font-size: 0.75rem !important;
+    text-align: right;
+    margin-top: 4px;
+  }
+}
+
+.mat-mdc-dialog-actions {
+  padding: 20px 28px 28px 28px !important;
+  margin: 0 !important;
+  border-top: 1px solid #e5e7eb;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  background: #fafbfc;
+
+  button {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    height: 40px !important;
+    padding: 0 20px !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s ease !important;
+
+    &.mat-mdc-button {
+      color: #6b7280 !important;
+      border: none !important;
+      background: transparent !important;
+      font-weight: 500 !important;
+
+      &:hover {
+        background: #f1f5f9 !important;
+        color: #374151 !important;
+      }
+
+      &:active {
+        background: #e2e8f0 !important;
+      }
+    }
+
+    &.mat-mdc-raised-button {
+      background: #6366f1 !important;
+      color: white !important;
+      box-shadow: 0 3px 6px rgba(99, 102, 241, 0.25) !important;
+      border: 1px solid transparent !important;
+      font-weight: 600 !important;
+
+      &:hover {
+        background: #4f46e5 !important;
+        box-shadow: 0 5px 10px rgba(99, 102, 241, 0.35) !important;
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3) !important;
+      }
+    }
+  }
+}
+
+// Form validation styling
+.mat-mdc-form-field-error {
+  color: #dc2626 !important;
+  font-size: 0.875rem !important;
+  margin-top: 6px !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-form-field.mat-form-field-invalid {
+  .mat-mdc-form-field-outline-thick {
+    color: #dc2626 !important;
+  }
+  
+  .mat-mdc-form-field-label {
+    color: #dc2626 !important;
+  }
+}
+
+// Date picker styling in dialog
+.mat-datepicker-popup {
+  .mat-calendar {
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// Select dropdown styling
+.mat-mdc-select-panel {
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid #e5e7eb !important;
+  
+  .mat-mdc-option {
+    font-weight: 500 !important;
+    
+    &:hover:not(.mdc-list-item--disabled) {
+      background: #f8fafc !important;
+    }
+    
+    &.mat-mdc-option-active {
+      background: #eef2ff !important;
+      color: #6366f1 !important;
+    }
+  }
+}
+
+// Icon styling in form fields
+.mat-mdc-form-field .mat-mdc-form-field-icon-prefix,
+.mat-mdc-form-field .mat-mdc-form-field-icon-suffix {
+  mat-icon {
+    color: #6b7280 !important;
+    font-size: 1.125rem !important;
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+  }
 }
