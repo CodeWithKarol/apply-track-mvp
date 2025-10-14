@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -37,54 +37,90 @@ export interface AddApplicationDialogResult {
   styleUrls: ['./add-application-dialog.component.scss'],
 })
 export class AddApplicationDialogComponent {
-  applicationForm: FormGroup;
-  isEditMode: boolean;
+  // Inject dependencies using the inject() function
+  private readonly dialogRef = inject(MatDialogRef<AddApplicationDialogComponent>);
+  public readonly data = inject<AddApplicationDialogData>(MAT_DIALOG_DATA);
 
-  readonly statuses: { value: ApplicationStatus; label: string }[] = [
+  // Signals for reactive state management
+  readonly isEditMode = signal<boolean>(!!this.data?.application);
+
+  readonly statuses = signal<{ value: ApplicationStatus; label: string }[]>([
     { value: 'applied', label: 'Applied' },
     { value: 'interview', label: 'Interview' },
     { value: 'offer', label: 'Offer' },
     { value: 'rejected', label: 'Rejected' },
-  ];
+  ]);
 
-  readonly reminderTypes = [
+  readonly reminderTypes = signal([
     { value: 'follow-up', label: 'Follow-up' },
     { value: 'interview', label: 'Interview' },
     { value: 'decision-deadline', label: 'Decision Deadline' },
-  ];
+  ]);
 
-  constructor(
-    private fb: FormBuilder,
-    private dialogRef: MatDialogRef<AddApplicationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AddApplicationDialogData
-  ) {
-    this.isEditMode = !!data?.application;
+  // Reactive form using FormGroup with typed controls
+  readonly applicationForm: FormGroup<{
+    company: FormControl<string>;
+    position: FormControl<string>;
+    status: FormControl<ApplicationStatus>;
+    dateApplied: FormControl<Date>;
+    notes: FormControl<string>;
+    reminderDate: FormControl<Date | null>;
+    reminderType: FormControl<'follow-up' | 'interview' | 'decision-deadline'>;
+    reminderDescription: FormControl<string>;
+  }> = new FormGroup({
+    company: new FormControl(this.data?.application?.company || '', {
+      validators: [Validators.required, Validators.minLength(2)],
+      nonNullable: true,
+    }),
+    position: new FormControl(this.data?.application?.position || '', {
+      validators: [Validators.required, Validators.minLength(2)],
+      nonNullable: true,
+    }),
+    status: new FormControl<ApplicationStatus>(this.data?.application?.status || 'applied', {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    dateApplied: new FormControl(this.data?.application?.dateApplied || new Date(), {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    notes: new FormControl(this.data?.application?.notes || '', { nonNullable: true }),
+    reminderDate: new FormControl<Date | null>(this.data?.application?.reminderDate || null),
+    reminderType: new FormControl<'follow-up' | 'interview' | 'decision-deadline'>(
+      this.data?.application?.reminderType || 'follow-up',
+      { nonNullable: true }
+    ),
+    reminderDescription: new FormControl(this.data?.application?.reminderDescription || '', {
+      nonNullable: true,
+    }),
+  });
 
-    this.applicationForm = this.fb.group({
-      company: [data?.application?.company || '', [Validators.required, Validators.minLength(2)]],
-      position: [data?.application?.position || '', [Validators.required, Validators.minLength(2)]],
-      status: [data?.application?.status || 'applied', Validators.required],
-      dateApplied: [data?.application?.dateApplied || new Date(), Validators.required],
-      notes: [data?.application?.notes || ''],
-      reminderDate: [data?.application?.reminderDate || null],
-      reminderType: [data?.application?.reminderType || 'follow-up'],
-      reminderDescription: [data?.application?.reminderDescription || ''],
-    });
+  // Getters for form validation - using reactive forms instead of signals
+  get isFormValid(): boolean {
+    return this.applicationForm.valid;
+  }
+
+  get notesLength(): number {
+    return this.applicationForm.controls.notes.value?.length || 0;
+  }
+
+  get reminderDescLength(): number {
+    return this.applicationForm.controls.reminderDescription.value?.length || 0;
   }
 
   onSubmit(): void {
     if (this.applicationForm.valid) {
-      const formValue = this.applicationForm.value;
+      const formValue = this.applicationForm.getRawValue();
       const result: AddApplicationDialogResult = {
         application: {
           company: formValue.company,
           position: formValue.position,
           status: formValue.status,
           dateApplied: formValue.dateApplied,
-          notes: formValue.notes,
-          reminderDate: formValue.reminderDate,
+          notes: formValue.notes || undefined,
+          reminderDate: formValue.reminderDate || undefined,
           reminderType: formValue.reminderType,
-          reminderDescription: formValue.reminderDescription,
+          reminderDescription: formValue.reminderDescription || undefined,
         },
       };
       this.dialogRef.close(result);
@@ -101,7 +137,8 @@ export class AddApplicationDialogComponent {
       return `${fieldName} is required`;
     }
     if (field?.hasError('minlength')) {
-      return `${fieldName} must be at least ${field.errors?.['minlength'].requiredLength} characters`;
+      const requiredLength = field.errors?.['minlength']?.requiredLength || 0;
+      return `${fieldName} must be at least ${requiredLength} characters`;
     }
     return '';
   }

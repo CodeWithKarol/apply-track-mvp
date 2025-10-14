@@ -1,6 +1,9 @@
 <h2 mat-dialog-title>
-  <mat-icon>{{ isEditMode ? 'edit' : 'add' }}</mat-icon>
-  {{ isEditMode ? 'Edit Application' : 'Add New Application' }}
+  @if (isEditMode()) {
+  <mat-icon>edit</mat-icon>
+  Edit Application } @else {
+  <mat-icon>add</mat-icon>
+  Add New Application }
 </h2>
 
 <mat-dialog-content>
@@ -37,7 +40,7 @@
       <mat-form-field appearance="outline" class="half-width">
         <mat-label>Application Status</mat-label>
         <mat-select formControlName="status" required>
-          @for (status of statuses; track status.value) {
+          @for (status of statuses(); track status.value) {
           <mat-option [value]="status.value">{{ status.label }}</mat-option>
           }
         </mat-select>
@@ -72,7 +75,7 @@
         maxlength="500"
       ></textarea>
       <mat-icon matPrefix>notes</mat-icon>
-      <mat-hint>{{ applicationForm.get('notes')?.value?.length || 0 }} / 500</mat-hint>
+      <mat-hint>{{ notesLength }} / 500</mat-hint>
     </mat-form-field>
 
     <!-- Reminder Section -->
@@ -96,7 +99,7 @@
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Reminder Type</mat-label>
           <mat-select formControlName="reminderType">
-            @for (type of reminderTypes; track type.value) {
+            @for (type of reminderTypes(); track type.value) {
             <mat-option [value]="type.value">{{ type.label }}</mat-option>
             }
           </mat-select>
@@ -113,9 +116,7 @@
           maxlength="200"
         />
         <mat-icon matPrefix>description</mat-icon>
-        <mat-hint
-          >{{ applicationForm.get('reminderDescription')?.value?.length || 0 }} / 200</mat-hint
-        >
+        <mat-hint>{{ reminderDescLength }} / 200</mat-hint>
       </mat-form-field>
     </div>
   </form>
@@ -123,14 +124,27 @@
 
 <mat-dialog-actions align="end">
   <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  @if (isEditMode()) {
   <button
     mat-raised-button
     color="primary"
     type="submit"
     (click)="onSubmit()"
-    [disabled]="applicationForm.invalid"
+    [disabled]="!isFormValid"
   >
-    <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
-    {{ isEditMode ? 'Save Changes' : 'Add Application' }}
+    <mat-icon>save</mat-icon>
+    Save Changes
   </button>
+  } @else {
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    (click)="onSubmit()"
+    [disabled]="!isFormValid"
+  >
+    <mat-icon>add</mat-icon>
+    Add Application
+  </button>
+  }
 </mat-dialog-actions>
