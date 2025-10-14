@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject, effect } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -10,13 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDropList,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   AddApplicationDialogComponent,
   AddApplicationDialogResult,
@@ -76,6 +70,9 @@ export interface ComputedReminder {
   styleUrl: './app.scss',
 })
 export class App {
+  // Inject dependencies using the inject() function
+  private readonly dialog = inject(MatDialog);
+
   protected readonly title = signal('ApplyTrack');
 
   // Separate arrays for each application status
@@ -177,10 +174,42 @@ export class App {
   protected readonly upcomingReminders = signal<ComputedReminder[]>([]);
   protected readonly overdueReminders = signal<ComputedReminder[]>([]);
 
-  constructor(private dialog: MatDialog) {
+  // Initialize data on component creation using constructor pattern
+  constructor() {
+    // Initial setup
     this.updateReminders();
     this.updateStats();
     this.updateFilteredApplications();
+
+    // Reactive effects to update computed values when source data changes
+    effect(() => {
+      // Watch all application arrays and update stats when they change
+      this.appliedApplications();
+      this.interviewApplications();
+      this.offerApplications();
+      this.rejectedApplications();
+      this.updateStats();
+    });
+
+    effect(() => {
+      // Watch all application arrays and update reminders when they change
+      this.appliedApplications();
+      this.interviewApplications();
+      this.offerApplications();
+      this.rejectedApplications();
+      this.updateReminders();
+    });
+
+    effect(() => {
+      // Watch search term, status filter, and application arrays for filtered updates
+      this.searchTerm();
+      this.selectedStatus();
+      this.appliedApplications();
+      this.interviewApplications();
+      this.offerApplications();
+      this.rejectedApplications();
+      this.updateFilteredApplications();
+    });
   }
 
   private getAllApplications(): JobApplication[] {
@@ -297,11 +326,7 @@ export class App {
         break;
       }
     }
-
-    console.log('Updating reminders and stats');
-    this.updateReminders();
-    this.updateStats();
-    this.updateFilteredApplications();
+    // Effects will automatically handle updates
   }
 
   getReminderIcon(type: string): string {
@@ -341,12 +366,12 @@ export class App {
   // Filter handling methods
   onSearchChange(value: string) {
     this.searchTerm.set(value);
-    this.updateFilteredApplications();
+    // Effect will automatically trigger updateFilteredApplications()
   }
 
   onStatusChange(status: ApplicationStatus | 'all') {
     this.selectedStatus.set(status);
-    this.updateFilteredApplications();
+    // Effect will automatically trigger updateFilteredApplications()
   }
 
   // Drag and drop handler for job applications
@@ -385,10 +410,7 @@ export class App {
       const newApplications = [...newArray(), updatedApplication];
       newArray.set(newApplications);
 
-      // Update everything
-      this.updateStats();
-      this.updateReminders();
-      this.updateFilteredApplications();
+      // Effects will automatically handle updates
     }
   }
 
@@ -479,10 +501,7 @@ export class App {
         break;
     }
 
-    // Update computed values
-    this.updateStats();
-    this.updateFilteredApplications();
-    this.updateReminders();
+    // Effects will automatically handle computed value updates
   }
 
   private updateExistingApplication(
@@ -530,10 +549,7 @@ export class App {
         break;
     }
 
-    // Update computed values
-    this.updateStats();
-    this.updateFilteredApplications();
-    this.updateReminders();
+    // Effects will automatically handle computed value updates
   }
 
   private generateId(): string {
