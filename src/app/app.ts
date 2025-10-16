@@ -99,6 +99,17 @@ export class App {
       reminderType: 'follow-up',
       reminderDescription: 'Check on application progress',
     },
+    {
+      id: '6',
+      company: 'Apple',
+      position: 'iOS Developer',
+      status: 'applied',
+      dateApplied: new Date('2025-09-30'),
+      notes: 'Applied through LinkedIn',
+      reminderDate: new Date('2025-10-05T10:00:00'), // Overdue reminder
+      reminderType: 'follow-up',
+      reminderDescription: 'Follow up on iOS developer position',
+    },
   ]);
 
   protected readonly interviewApplications = signal<JobApplication[]>([
@@ -138,17 +149,6 @@ export class App {
       dateApplied: new Date('2025-09-20'),
       notes: 'Technical interview did not go well',
       // No reminder for rejected applications
-    },
-    {
-      id: '6',
-      company: 'Apple',
-      position: 'iOS Developer',
-      status: 'applied',
-      dateApplied: new Date('2025-09-30'),
-      notes: 'Applied through LinkedIn',
-      reminderDate: new Date('2025-10-05T10:00:00'), // Overdue reminder
-      reminderType: 'follow-up',
-      reminderDescription: 'Follow up on iOS developer position',
     },
   ]);
 
@@ -553,7 +553,7 @@ export class App {
   }
 
   private generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+    return Math.random().toString(36).substring(2, 9);
   }
 
   private updateStats() {
