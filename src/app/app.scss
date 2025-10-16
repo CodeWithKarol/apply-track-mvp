@@ -1,0 +1,1566 @@
+/* ApplyTrack Dashboard Styles - Modern Minimalistic Design */
+
+// Custom CSS properties for modern design with enhanced contrast
+:root {
+  // Modern gradient system with more sophisticated colors
+  --app-primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --app-secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --app-accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --app-success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --app-warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+
+  // Modern glass morphism surfaces
+  --app-surface-elevation-1: rgba(255, 255, 255, 0.85);
+  --app-surface-elevation-2: rgba(255, 255, 255, 0.95);
+  --app-surface-glass: rgba(255, 255, 255, 0.1);
+  --app-surface-glass-strong: rgba(255, 255, 255, 0.2);
+
+  // Modern shadow system with more depth
+  --app-shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --app-shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.12);
+  --app-shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --app-shadow-floating: 0 16px 64px rgba(0, 0, 0, 0.2);
+
+  // Modern border radius system
+  --app-border-radius: 16px;
+  --app-border-radius-small: 12px;
+  --app-border-radius-large: 24px;
+  --app-border-radius-xl: 32px;
+
+  // Enhanced spacing system
+  --app-spacing-xs: 4px;
+  --app-spacing-sm: 8px;
+  --app-spacing-md: 16px;
+  --app-spacing-lg: 24px;
+  --app-spacing-xl: 32px;
+  --app-spacing-2xl: 48px;
+
+  // Modern typography colors
+  --app-text-primary: #1e293b;
+  --app-text-secondary: #475569;
+  --app-text-muted: #64748b;
+  --app-text-accent: #6366f1;
+
+  // Modern border system
+  --app-border-light: rgba(0, 0, 0, 0.08);
+  --app-border-medium: rgba(0, 0, 0, 0.12);
+  --app-border-strong: rgba(0, 0, 0, 0.16);
+
+  // Modern backdrop blur
+  --app-blur-subtle: blur(8px);
+  --app-blur-medium: blur(16px);
+  --app-blur-strong: blur(24px);
+}
+
+.example-spacer {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: block !important;
+}
+
+// Modern header styling to match app design
+mat-toolbar {
+  background: linear-gradient(
+    135deg,
+    #4f46e5 0%,
+    #7c3aed 100%
+  ) !important; // Gradient to match modern design
+  box-shadow: 0 4px 20px rgba(79, 70, 229, 0.25) !important; // Enhanced shadow with color
+  border-bottom: none;
+  color: white !important;
+  min-height: 72px !important; // Slightly taller for better presence
+  height: 72px !important;
+  padding: 0 32px !important; // Increased padding for better spacing
+  width: 100% !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  backdrop-filter: blur(10px) !important; // Glass morphism effect
+
+  // Modern gradient overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    pointer-events: none;
+  }
+
+  // Ensure proper display and alignment
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+  gap: 24px !important; // Increased gap for better spacing
+
+  // Ensure all text elements in toolbar are visible
+  * {
+    color: white !important;
+    position: relative;
+    z-index: 2;
+  }
+
+  // Override any Material Design color inheritance
+  .mat-toolbar-row,
+  .mat-toolbar-single-row {
+    color: white !important;
+    padding: 0 !important; // Remove default Material padding
+    height: 100% !important;
+  }
+}
+
+.toolbar-left {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  flex: 0 1 auto !important;
+  z-index: 10 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  gap: 2px !important; // Small gap between title and subtitle
+  padding: 0 !important; // Remove any default padding
+}
+
+.app-title {
+  font-size: 1.75rem !important; // Larger, more prominent title
+  font-weight: 800 !important; // Extra bold for modern look
+  line-height: 1.2;
+  color: white !important;
+  letter-spacing: -0.05em !important; // Tighter letter spacing for modern feel
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important; // Stronger shadow
+  margin: 0;
+  display: block;
+}
+
+.app-subtitle {
+  font-size: 0.95rem !important; // Slightly larger subtitle
+  opacity: 1;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.95) !important; // Slightly more opaque
+  font-weight: 500 !important; // Medium weight for better readability
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important; // Stronger shadow
+  margin: 0;
+  display: block;
+  letter-spacing: 0.025em !important; // Slight letter spacing for elegance
+}
+
+button.add-application-btn {
+  background: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 6px !important;
+  padding: 10px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  text-transform: none !important;
+  transition: all 0.2s ease !important;
+  color: #374151 !important;
+
+  span,
+  .mat-button-wrapper,
+  .mdc-button__label {
+    color: #374151 !important;
+    font-weight: 600 !important;
+  }
+
+  &:hover {
+    background: #f9fafb !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  mat-icon {
+    color: #374151 !important;
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  &.mat-mdc-raised-button,
+  &.mat-mdc-button,
+  &.mat-button {
+    background: white !important;
+    color: #374151 !important;
+    box-shadow: none !important;
+
+    .mdc-button__label {
+      color: #374151 !important;
+    }
+
+    .mat-icon {
+      color: #374151 !important;
+    }
+  }
+}
+
+.dashboard-container {
+  padding: 32px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #fafbfc;
+  min-height: calc(100vh - 72px);
+
+  // All children should be positioned above the overlay
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+  align-items: stretch;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: white;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 140px;
+  padding: var(--app-spacing-xl);
+
+  // Modern gradient border effect
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 2px;
+    background: var(--app-primary-gradient);
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask-composite: xor;
+  }
+
+  &:hover {
+    border-color: #e2e8f0;
+  }
+}
+
+// Modern animations
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.stat-card {
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    line-height: 1;
+    color: #1f2937;
+  }
+
+  .stat-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.search-filter-container {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+
+  .search-field,
+  .filter-field {
+    background: var(--app-surface-elevation-2);
+    backdrop-filter: blur(10px);
+    border-radius: var(--app-border-radius);
+    box-shadow: var(--app-shadow-subtle);
+
+    .mat-mdc-form-field-outline {
+      color: var(--app-border-light);
+    }
+
+    &:hover .mat-mdc-form-field-outline {
+      color: var(--app-border-medium);
+    }
+
+    &.mat-focused .mat-mdc-form-field-outline {
+      border-width: 2px;
+      color: var(--app-border-strong);
+    }
+  }
+
+  .search-field {
+    flex: 1;
+    min-width: 320px;
+  }
+
+  .filter-field {
+    min-width: 200px;
+  }
+}
+
+.reminders-section {
+  margin-bottom: 32px;
+
+  h2 {
+    margin: 0 0 24px 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+
+    // Fallback gradient (commented out for better contrast)
+    // background: var(--app-primary-gradient);
+    // background-clip: text;
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
+  }
+
+  .overdue-section {
+    margin-bottom: 48px !important; // Extra space after overdue section for better separation
+    padding: 16px !important; // Internal padding for better visual container
+    background: rgba(220, 38, 38, 0.02) !important; // Very subtle background tint
+    border-radius: var(--app-border-radius) !important;
+    border: 1px solid rgba(220, 38, 38, 0.1) !important; // Subtle border
+  }
+
+  .upcoming-section {
+    margin-bottom: 32px !important; // Spacing between reminder subsections
+    padding: 16px !important; // Internal padding for better visual container
+    background: rgba(79, 70, 229, 0.02) !important; // Very subtle background tint
+    border-radius: var(--app-border-radius) !important;
+    border: 1px solid rgba(79, 70, 229, 0.08) !important; // Subtle border
+  }
+
+  .overdue-title {
+    display: flex;
+    align-items: center;
+    gap: 8px !important; // Consistent gap between icon and text
+    margin: 0 0 20px 0 !important; // Better spacing before reminder cards
+    padding: 12px 0 !important; // Vertical padding for better visual hierarchy
+    font-size: 1.125rem;
+    font-weight: 700 !important; // Bolder for better readability
+    color: #dc2626 !important; // Darker red for better contrast
+    border-bottom: 1px solid rgba(220, 38, 38, 0.2); // Subtle separator
+
+    mat-icon {
+      color: #dc2626 !important;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .upcoming-title {
+    margin: 0 0 20px 0 !important; // Consistent spacing before reminder cards
+    padding: 12px 0 !important; // Vertical padding for better visual hierarchy
+    font-size: 1.125rem;
+    font-weight: 700 !important; // Bolder for better readability
+    color: #1a1a1a !important; // Use solid dark color for maximum visibility
+    border-bottom: 1px solid #e2e8f0; // Visible border
+  }
+
+  .no-reminders {
+    text-align: center;
+    padding: var(--app-spacing-xl);
+    background: var(--app-surface-elevation-2);
+    border-radius: var(--app-border-radius);
+    border: 1px solid var(--app-border-light);
+    box-shadow: var(--app-shadow-subtle);
+    color: var(--app-text-secondary);
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      background: var(--app-success-gradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: var(--app-spacing-md);
+    }
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--app-text-secondary);
+    }
+  }
+
+  .reminders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px !important; // Tighter spacing between individual reminder cards
+    margin-top: 8px !important; // Small top margin after section title
+  }
+
+  .reminder-card {
+    background: white;
+    border: 1px solid #f1f5f9;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #e2e8f0;
+    }
+
+    &.urgent {
+      border-left: 3px solid #f59e0b;
+    }
+
+    &.overdue {
+      border-left: 3px solid #dc2626;
+    }
+
+    .reminder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px !important; // Consistent gap between sections
+      padding: 16px !important; // Internal padding for better spacing
+    }
+
+    .reminder-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px !important; // Consistent spacing between icon and text
+      flex: 1;
+    }
+
+    .reminder-icon {
+      background: var(--app-primary-gradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 2px;
+    }
+
+    .reminder-details {
+      flex: 1;
+
+      h4 {
+        margin: 0 0 6px 0 !important; // Tighter spacing between title and description
+        font-size: 1rem;
+        font-weight: 700 !important; // Bolder for better readability
+        color: var(--app-text-primary);
+        letter-spacing: -0.025em;
+        line-height: 1.4 !important;
+      }
+
+      .reminder-description {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--app-text-secondary);
+        line-height: 1.5;
+        font-weight: 500 !important; // Slightly bolder for better readability
+      }
+    }
+
+    .reminder-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px !important; // Consistent spacing between date and button
+    }
+
+    .reminder-date {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      small {
+        color: var(--app-text-secondary);
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+
+      .reminder-time {
+        font-weight: 600;
+        color: var(--app-text-primary);
+      }
+
+      .urgency-text {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #0ea5e9;
+      }
+
+      .overdue-text {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #dc2626;
+      }
+    }
+
+    .urgent-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--app-spacing-xs);
+      margin-top: var(--app-spacing-md);
+      padding: var(--app-spacing-xs) var(--app-spacing-sm);
+      background: linear-gradient(
+        135deg,
+        rgba(245, 158, 11, 0.15) 0%,
+        rgba(255, 255, 255, 0.9) 100%
+      );
+      border-radius: 16px;
+      width: fit-content;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: #f59e0b;
+      }
+
+      span {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #92400e;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+  }
+}
+
+.status-columns-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.status-column {
+  background: white;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 480px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    border-color: #e2e8f0;
+  }
+
+  .column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+
+    span {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #374151;
+
+      // Fallback gradient (commented out for better contrast)
+      // background: var(--app-primary-gradient);
+      // background-clip: text;
+      // -webkit-background-clip: text;
+      // -webkit-text-fill-color: transparent;
+    }
+
+    mat-chip {
+      background: #f8fafc;
+      color: #64748b;
+      font-weight: 500;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      border: 1px solid #e2e8f0;
+    }
+  }
+
+  .column-content {
+    min-height: 320px;
+    padding: 16px; // Consistent padding for all columns
+    border-radius: var(--app-border-radius-small);
+    background: rgba(248, 250, 252, 0.6);
+    border: 2px dashed var(--app-border-light);
+    transition: all 0.3s ease;
+
+    &.cdk-drop-list-receiving {
+      background: rgba(14, 165, 233, 0.08);
+      border-color: rgba(14, 165, 233, 0.4);
+      border-style: solid;
+      box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.2);
+    }
+  }
+}
+
+.application-card {
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  overflow: hidden;
+
+  // Ensure proper positioning for pseudo-elements
+  position: relative;
+
+  // Override Material Design default padding
+  .mat-mdc-card {
+    padding: 0 !important;
+  }
+
+  // Pseudo-elements are now handled in hover state
+
+  &:hover {
+    border-color: #6366f1 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15) !important;
+
+    &::after {
+      opacity: 1;
+    }
+
+    &::before {
+      opacity: 1;
+    }
+
+    // Full card overlay effect
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(99, 102, 241, 0.08);
+      border-radius: 8px;
+      opacity: 1;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    // Edit icon over the overlay
+    &::before {
+      content: '✏️';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 14px;
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px;
+      border-radius: 4px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    // Highlight the title on hover
+    mat-card-title {
+      color: #6366f1 !important;
+      position: relative;
+      z-index: 6;
+    }
+
+    // Ensure content is above overlay
+    mat-card-header,
+    mat-card-content {
+      position: relative;
+      z-index: 6;
+    }
+
+    // Show edit cursor more prominently
+    cursor: pointer !important;
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
+  }
+
+  // Edit icon is now handled in hover state
+
+  mat-card-header {
+    margin: 0 !important;
+    padding: 18px 18px 12px 18px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    background: transparent !important;
+
+    // Override Material Design defaults
+    .mat-mdc-card-header {
+      padding: 0 !important;
+    }
+  }
+
+  mat-card-title {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+    letter-spacing: -0.015em;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  mat-card-subtitle {
+    font-size: 0.875rem !important;
+    color: #6b7280 !important;
+    font-weight: 500 !important;
+    margin: 4px 0 0 0 !important;
+    padding: 0 !important;
+    line-height: 1.4 !important;
+  }
+
+  mat-card-content {
+    padding: 12px 18px 18px 18px !important;
+    margin: 0 !important;
+
+    // Override Material Design defaults
+    .mat-mdc-card-content {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    p {
+      margin: 0 0 8px 0 !important;
+      line-height: 1.5 !important;
+
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    small {
+      color: #6b7280 !important;
+      font-weight: 700 !important; // Extra bold for maximum readability
+      font-size: 0.85rem !important; // Larger text size
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important; // Subtle shadow for clarity
+    }
+  }
+}
+
+// Enhanced CDK Drag and Drop styling
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: var(--app-border-radius);
+  box-shadow: var(--app-shadow-elevated);
+  background: var(--app-surface-elevation-2);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--app-border-medium);
+  transform: rotate(5deg);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.4;
+  background: rgba(14, 165, 233, 0.08);
+  border: 2px dashed rgba(14, 165, 233, 0.4);
+  border-radius: var(--app-border-radius);
+}
+
+.cdk-drag-animating {
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cdk-drop-list-dragging .application-card:not(.cdk-drag-placeholder) {
+  transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cdk-drop-list-receiving {
+  .column-content {
+    background: rgba(14, 165, 233, 0.08);
+    border-color: rgba(14, 165, 233, 0.4);
+    border-style: solid;
+    box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.2);
+  }
+}
+
+/* Enhanced Responsive Design */
+// Tablet breakpoint
+@media (max-width: 1024px) and (min-width: 769px) {
+  .dashboard-container {
+    padding: 32px 24px 24px 24px !important; // Medium padding for tablets
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  mat-toolbar {
+    padding: 16px !important;
+    min-height: 120px !important;
+    height: auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    gap: 12px !important;
+
+    .example-spacer {
+      display: none !important;
+    }
+
+    .toolbar-left {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center !important;
+      gap: 4px !important;
+      margin-bottom: 8px !important;
+    }
+
+    .app-title {
+      font-size: 1.3rem !important;
+      font-weight: 700 !important;
+      line-height: 1.2 !important;
+    }
+
+    .app-subtitle {
+      font-size: 0.85rem !important;
+      opacity: 0.9 !important;
+      line-height: 1.3 !important;
+    }
+
+    .add-application-btn {
+      width: 100% !important;
+      margin: 0 !important;
+      justify-content: center !important;
+      padding: 12px 20px !important;
+      font-size: 0.9rem !important;
+      font-weight: 600 !important;
+      border-radius: 8px !important;
+
+      mat-icon {
+        margin-right: 8px !important;
+      }
+    }
+  }
+
+  .dashboard-container {
+    padding: 16px 12px !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    min-height: calc(100vh - 140px) !important;
+  }
+
+  .search-filter-container {
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-bottom: 24px !important;
+
+    .search-field,
+    .filter-field {
+      min-width: auto !important;
+      width: 100% !important;
+    }
+  }
+
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .stat-card {
+    min-height: 100px !important;
+    padding: 16px 12px !important;
+
+    .stat-value {
+      font-size: 1.75rem !important;
+    }
+
+    .stat-label {
+      font-size: 0.75rem !important;
+    }
+  }
+
+  .reminders-section {
+    margin-bottom: 24px !important;
+
+    h2 {
+      font-size: 1.25rem !important;
+      margin-bottom: 16px !important;
+    }
+
+    .reminder-card {
+      margin-bottom: 16px !important;
+      border-radius: 8px !important;
+      overflow: hidden !important;
+
+      .reminder-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 16px !important;
+        padding: 16px !important;
+      }
+
+      .reminder-info {
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+
+      .reminder-icon {
+        flex-shrink: 0 !important;
+        font-size: 1.25rem !important;
+        margin-top: 2px !important;
+      }
+
+      .reminder-details {
+        flex: 1 !important;
+
+        h4 {
+          font-size: 0.95rem !important;
+          font-weight: 600 !important;
+          line-height: 1.3 !important;
+          margin-bottom: 6px !important;
+        }
+
+        .reminder-description {
+          font-size: 0.8rem !important;
+          line-height: 1.4 !important;
+          color: #6b7280 !important;
+        }
+      }
+
+      .reminder-actions {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 12px 16px 16px 16px !important;
+        background: #f9fafb !important;
+        margin: 0 -16px -16px -16px !important;
+        border-top: 1px solid #f1f5f9 !important;
+      }
+
+      .reminder-date {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 2px !important;
+
+        small {
+          font-size: 0.75rem !important;
+          color: #6b7280 !important;
+        }
+
+        .reminder-time {
+          font-weight: 600 !important;
+          color: #374151 !important;
+        }
+
+        .urgency-text,
+        .overdue-text {
+          font-size: 0.7rem !important;
+          font-weight: 600 !important;
+          padding: 2px 6px !important;
+          border-radius: 4px !important;
+          background: rgba(14, 165, 233, 0.1) !important;
+          color: #0ea5e9 !important;
+        }
+
+        .overdue-text {
+          background: rgba(220, 38, 38, 0.1) !important;
+          color: #dc2626 !important;
+        }
+      }
+
+      button[mat-icon-button] {
+        width: 40px !important;
+        height: 40px !important;
+
+        mat-icon {
+          font-size: 1.125rem !important;
+        }
+      }
+    }
+  }
+
+  .status-columns-container {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .status-column {
+    .column-header {
+      padding: 12px 16px !important;
+
+      span {
+        font-size: 1rem !important;
+      }
+    }
+
+    .column-content {
+      padding: 12px !important;
+    }
+  }
+
+  .application-card {
+    margin-bottom: 12px !important;
+
+    mat-card-header {
+      padding: 14px 14px 8px 14px !important;
+    }
+
+    mat-card-content {
+      padding: 8px 14px 14px 14px !important;
+    }
+
+    mat-card-title {
+      font-size: 1rem !important;
+    }
+
+    mat-card-subtitle {
+      font-size: 0.8rem !important;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  mat-toolbar {
+    padding: 16px 12px !important;
+    min-height: 110px !important;
+
+    .toolbar-left {
+      margin-bottom: 12px !important;
+    }
+
+    .app-title {
+      font-size: 1.2rem !important;
+      font-weight: 700 !important;
+    }
+
+    .app-subtitle {
+      font-size: 0.8rem !important;
+      opacity: 0.9 !important;
+    }
+
+    .add-application-btn {
+      padding: 12px 18px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+
+      mat-icon {
+        font-size: 1rem !important;
+        width: 1rem !important;
+        height: 1rem !important;
+      }
+    }
+  }
+
+  .dashboard-container {
+    padding: 12px 8px !important;
+    min-height: calc(100vh - 130px) !important;
+  }
+
+  .stats-container {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .stat-card {
+    min-height: 85px !important;
+    padding: 12px 8px !important;
+
+    .stat-value {
+      font-size: 1.5rem !important;
+    }
+
+    .stat-label {
+      font-size: 0.7rem !important;
+    }
+  }
+
+  .search-filter-container {
+    gap: 8px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .reminders-section {
+    margin-bottom: 20px !important;
+
+    h2 {
+      font-size: 1.1rem !important;
+      margin-bottom: 12px !important;
+    }
+
+    .reminder-card {
+      margin-bottom: 12px !important;
+
+      .reminder-header {
+        padding: 12px !important;
+        gap: 12px !important;
+      }
+
+      .reminder-details {
+        h4 {
+          font-size: 0.9rem !important;
+          margin-bottom: 4px !important;
+        }
+
+        .reminder-description {
+          font-size: 0.75rem !important;
+        }
+      }
+
+      .reminder-actions {
+        padding: 10px 12px 12px 12px !important;
+        margin: 0 -12px -12px -12px !important;
+      }
+
+      .reminder-date {
+        small {
+          font-size: 0.7rem !important;
+        }
+
+        .urgency-text,
+        .overdue-text {
+          font-size: 0.65rem !important;
+          padding: 1px 4px !important;
+        }
+      }
+
+      button[mat-icon-button] {
+        width: 36px !important;
+        height: 36px !important;
+
+        mat-icon {
+          font-size: 1rem !important;
+        }
+      }
+    }
+  }
+
+  .status-columns-container {
+    gap: 16px !important;
+  }
+
+  .status-column {
+    .column-header {
+      padding: 10px 12px !important;
+
+      span {
+        font-size: 0.9rem !important;
+      }
+
+      mat-chip {
+        font-size: 0.75rem !important;
+      }
+    }
+
+    .column-content {
+      padding: 8px !important;
+    }
+  }
+
+  .application-card {
+    margin-bottom: 10px !important;
+
+    mat-card-header {
+      padding: 12px 12px 6px 12px !important;
+    }
+
+    mat-card-content {
+      padding: 6px 12px 12px 12px !important;
+    }
+
+    mat-card-title {
+      font-size: 0.95rem !important;
+    }
+
+    mat-card-subtitle {
+      font-size: 0.75rem !important;
+    }
+
+    small {
+      font-size: 0.7rem !important;
+    }
+  }
+
+  // Smaller form fields on mobile
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-label {
+      font-size: 0.8rem !important;
+    }
+
+    .mat-mdc-input-element {
+      font-size: 0.9rem !important;
+    }
+  }
+}
+
+/* Custom scrollbar styling with higher contrast */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--app-border-light);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--app-primary-gradient);
+  border-radius: 5px;
+  border: 1px solid var(--app-border-light);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #3730a3 0%, #581c87 100%);
+}
+
+// Dialog styling to match minimalistic design
+.mat-mdc-dialog-container {
+  .mdc-dialog__surface {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e5e7eb;
+    padding: 0;
+    max-width: 500px;
+    width: 90vw;
+
+    @media (max-width: 768px) {
+      max-width: 95vw;
+      border-radius: 8px;
+      margin: 16px;
+    }
+
+    @media (max-width: 480px) {
+      max-width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      margin: 0;
+    }
+  }
+}
+
+mat-dialog-container {
+  padding: 0 !important;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.mat-mdc-dialog-title {
+  font-size: 1.375rem !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  margin: 0 !important;
+  padding: 28px 28px 20px 28px !important;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+
+  mat-icon {
+    color: #6366f1;
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.mat-mdc-dialog-content {
+  padding: 28px !important;
+  color: #374151;
+  max-height: 70vh;
+  overflow-y: auto;
+
+  .mat-mdc-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+
+    &.mat-form-field-appearance-outline {
+      .mat-mdc-form-field-outline {
+        color: #d1d5db;
+      }
+
+      .mat-mdc-form-field-outline-thick {
+        color: #d1d5db;
+      }
+
+      &.mat-focused .mat-mdc-form-field-outline-thick {
+        color: #6366f1 !important;
+      }
+
+      &:hover:not(.mat-focused):not(.mat-form-field-invalid) {
+        .mat-mdc-form-field-outline {
+          color: #9ca3af;
+        }
+      }
+    }
+
+    .mat-mdc-form-field-label {
+      color: #6b7280 !important;
+      font-weight: 600 !important;
+      font-size: 0.875rem !important;
+    }
+
+    .mat-mdc-input-element {
+      color: #111827 !important;
+      font-weight: 500 !important;
+      font-size: 0.95rem !important;
+    }
+
+    .mat-mdc-select-value {
+      color: #111827 !important;
+      font-weight: 500 !important;
+      font-size: 0.95rem !important;
+    }
+
+    .mat-mdc-form-field-icon-suffix {
+      color: #6b7280;
+    }
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background: white;
+    border-radius: 8px;
+  }
+
+  textarea.mat-mdc-input-element {
+    min-height: 100px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  // Section dividers
+  h3 {
+    color: #111827;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 24px 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  // Character counter styling
+  .mat-mdc-form-field-hint {
+    color: #9ca3af !important;
+    font-size: 0.75rem !important;
+    text-align: right;
+    margin-top: 4px;
+  }
+}
+
+.mat-mdc-dialog-actions {
+  padding: 20px 28px 28px 28px !important;
+  margin: 0 !important;
+  border-top: 1px solid #e5e7eb;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  background: #fafbfc;
+
+  button {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    height: 40px !important;
+    padding: 0 20px !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s ease !important;
+
+    &.mat-mdc-button {
+      color: #6b7280 !important;
+      border: none !important;
+      background: transparent !important;
+      font-weight: 500 !important;
+
+      &:hover {
+        background: #f1f5f9 !important;
+        color: #374151 !important;
+      }
+
+      &:active {
+        background: #e2e8f0 !important;
+      }
+    }
+
+    &.mat-mdc-raised-button {
+      background: #6366f1 !important;
+      color: white !important;
+      box-shadow: 0 3px 6px rgba(99, 102, 241, 0.25) !important;
+      border: 1px solid transparent !important;
+      font-weight: 600 !important;
+
+      &:hover {
+        background: #4f46e5 !important;
+        box-shadow: 0 5px 10px rgba(99, 102, 241, 0.35) !important;
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3) !important;
+      }
+    }
+  }
+}
+
+// Form validation styling
+.mat-mdc-form-field-error {
+  color: #dc2626 !important;
+  font-size: 0.875rem !important;
+  margin-top: 6px !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-form-field.mat-form-field-invalid {
+  .mat-mdc-form-field-outline-thick {
+    color: #dc2626 !important;
+  }
+
+  .mat-mdc-form-field-label {
+    color: #dc2626 !important;
+  }
+}
+
+// Date picker styling in dialog
+.mat-datepicker-popup {
+  .mat-calendar {
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// Select dropdown styling
+.mat-mdc-select-panel {
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid #e5e7eb !important;
+
+  .mat-mdc-option {
+    font-weight: 500 !important;
+
+    &:hover:not(.mdc-list-item--disabled) {
+      background: #f8fafc !important;
+    }
+
+    &.mat-mdc-option-active {
+      background: #eef2ff !important;
+      color: #6366f1 !important;
+    }
+  }
+}
+
+// Icon styling in form fields
+.mat-mdc-form-field .mat-mdc-form-field-icon-prefix,
+.mat-mdc-form-field .mat-mdc-form-field-icon-suffix {
+  mat-icon {
+    color: #6b7280 !important;
+    font-size: 1.125rem !important;
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+  }
+}
+
+// Mobile touch improvements
+@media (max-width: 768px) {
+  // Larger touch targets for mobile
+  button,
+  .mat-mdc-button,
+  .mat-mdc-raised-button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  .mat-mdc-icon-button {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  // Improved form field spacing on mobile
+  .mat-mdc-form-field {
+    margin-bottom: 20px !important;
+  }
+
+  // Better spacing for chips
+  mat-chip {
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
+
+  // Improved dialog actions on mobile
+  .mat-mdc-dialog-actions {
+    padding: 16px 20px 20px 20px !important;
+
+    button {
+      min-height: 48px !important;
+      font-size: 0.9rem !important;
+    }
+  }
+
+  // Better dialog content spacing
+  .mat-mdc-dialog-content {
+    padding: 20px !important;
+  }
+
+  .mat-mdc-dialog-title {
+    padding: 20px 20px 16px 20px !important;
+    font-size: 1.2rem !important;
+  }
+}

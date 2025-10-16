@@ -1,0 +1,77 @@
+.application-form {
+  min-width: 500px;
+  max-width: 600px;
+  padding: 20px 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  flex: 1;
+}
+
+.reminder-section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.reminder-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+mat-dialog-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  margin: 0;
+}
+
+mat-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+mat-form-field {
+  margin-bottom: 16px;
+}
+
+mat-form-field mat-icon[matPrefix] {
+  margin-right: 8px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-color: white;
+  --mdc-dialog-supporting-text-color: rgba(0, 0, 0, 0.87);
+}
+
+@media (max-width: 600px) {
+  .application-form {
+    min-width: 300px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .half-width {
+    width: 100%;
+  }
+}

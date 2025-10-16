@@ -1,0 +1,150 @@
+<h2 mat-dialog-title>
+  @if (isEditMode()) {
+  <mat-icon>edit</mat-icon>
+  Edit Application } @else {
+  <mat-icon>add</mat-icon>
+  Add New Application }
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="applicationForm" class="application-form">
+    <!-- Company and Position Row -->
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Company Name</mat-label>
+        <input
+          matInput
+          formControlName="company"
+          placeholder="e.g., Google, Microsoft, Apple"
+          required
+        />
+        <mat-icon matPrefix>business</mat-icon>
+        <mat-error>{{ getErrorMessage('company') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Position</mat-label>
+        <input
+          matInput
+          formControlName="position"
+          placeholder="e.g., Frontend Developer, Software Engineer"
+          required
+        />
+        <mat-icon matPrefix>work</mat-icon>
+        <mat-error>{{ getErrorMessage('position') }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Status and Date Applied Row -->
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Application Status</mat-label>
+        <mat-select formControlName="status" required>
+          @for (status of statuses(); track status.value) {
+          <mat-option [value]="status.value">{{ status.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matPrefix>assignment</mat-icon>
+        <mat-error>{{ getErrorMessage('status') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Date Applied</mat-label>
+        <input
+          matInput
+          [matDatepicker]="dateAppliedPicker"
+          formControlName="dateApplied"
+          placeholder="MM/DD/YYYY"
+          required
+        />
+        <mat-icon matPrefix>calendar_today</mat-icon>
+        <mat-datepicker-toggle matIconSuffix [for]="dateAppliedPicker"></mat-datepicker-toggle>
+        <mat-datepicker #dateAppliedPicker></mat-datepicker>
+        <mat-error>{{ getErrorMessage('dateApplied') }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Notes -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Notes (Optional)</mat-label>
+      <textarea
+        matInput
+        formControlName="notes"
+        placeholder="Add any additional notes about this application..."
+        rows="3"
+        maxlength="500"
+      ></textarea>
+      <mat-icon matPrefix>notes</mat-icon>
+      <mat-hint>{{ notesLength }} / 500</mat-hint>
+    </mat-form-field>
+
+    <!-- Reminder Section -->
+    <div class="reminder-section">
+      <h3>Set Reminder (Optional)</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Reminder Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="reminderDatePicker"
+            formControlName="reminderDate"
+            placeholder="MM/DD/YYYY"
+          />
+          <mat-icon matPrefix>alarm</mat-icon>
+          <mat-datepicker-toggle matIconSuffix [for]="reminderDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #reminderDatePicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Reminder Type</mat-label>
+          <mat-select formControlName="reminderType">
+            @for (type of reminderTypes(); track type.value) {
+            <mat-option [value]="type.value">{{ type.label }}</mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>label</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Reminder Description</mat-label>
+        <input
+          matInput
+          formControlName="reminderDescription"
+          placeholder="e.g., Follow up on application status"
+          maxlength="200"
+        />
+        <mat-icon matPrefix>description</mat-icon>
+        <mat-hint>{{ reminderDescLength }} / 200</mat-hint>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  @if (isEditMode()) {
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    (click)="onSubmit()"
+    [disabled]="!isFormValid"
+  >
+    <mat-icon>save</mat-icon>
+    Save Changes
+  </button>
+  } @else {
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    (click)="onSubmit()"
+    [disabled]="!isFormValid"
+  >
+    <mat-icon>add</mat-icon>
+    Add Application
+  </button>
+  }
+</mat-dialog-actions>
